@@ -1,1 +1,7 @@
  
+{
+  "name": "school-organizer",
+  "version": "1.0.0",
+  "description": "School Organizer App",
+  "private": true
+}
