@@ -73,6 +73,7 @@
                                 <i class="fas fa-tasks me-1"></i>Assignments
                             </a>
                         </li>
+                      
                         <li class="nav-item">
                             <a class="nav-link" href="#" onclick="showSection('notes')">
                                 <i class="fas fa-sticky-note me-1"></i>Notes
@@ -83,6 +84,11 @@
                                 <i class="fas fa-video me-1"></i>Lectures
                             </a>
                         </li>
+                        <li class="nav-item">
+    <a class="nav-link" href="#" onclick="showSection('connect')">
+        <i class="fas fa-handshake me-1"></i>Connect
+    </a>
+</li>
                     </ul>
                     <!-- User Profile Dropdown -->
                     <div class="dropdown">
@@ -503,6 +509,138 @@
                                                 <textarea class="form-control" id="lectureDescription" rows="3" 
                                                          placeholder="Brief description of what this lecture covers (optional)"></textarea>
                                             </div>
+                                            <!-- Connect with Me Section -->
+<div id="connect" class="section" style="display: none;">
+    <div class="row">
+        <div class="col-12">
+            <h2><i class="fas fa-handshake me-2"></i>Connect with Me</h2>
+            <p class="text-muted">I'd love to hear your feedback and collaborate on exciting projects!</p>
+            <hr>
+        </div>
+    </div>
+
+    <!-- Connect Cards -->
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card connect-card shadow-lg">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <div class="connect-avatar mb-3">
+                            <i class="fas fa-user-circle fa-4x text-primary"></i>
+                        </div>
+                        <h3 class="mb-2">Let's Build Something Amazing Together!</h3>
+                        <p class="text-muted">Open to collaboration, feedback, and new opportunities</p>
+                    </div>
+
+                    <!-- Contact Options -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <a href="mailto:sannishazily@gmail.com" class="connect-option">
+                                <div class="connect-icon email">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="connect-content">
+                                    <h5>Email Me</h5>
+                                    <p>sannishazily@gmail.com</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="https://wa.me/2347084708292" target="_blank" class="connect-option">
+                                <div class="connect-icon" style="background: linear-gradient(45deg, #25D366, #128C7E);">
+                                    <i class="fab fa-whatsapp"></i>
+                                </div>
+                                <div class="connect-content">
+                                    <h5>WhatsApp</h5>
+                                    <p>07084708292</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="https://github.com/yourusername" target="_blank" class="connect-option">
+                                <div class="connect-icon github">
+                                    <i class="fab fa-github"></i>
+                                </div>
+                                <div class="connect-content">
+                                    <h5>GitHub</h5>
+                                    <p>Check out my projects</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="https://linkedin.com/in/yourprofile" target="_blank" class="connect-option">
+                                <div class="connect-icon linkedin">
+                                    <i class="fab fa-linkedin"></i>
+                                </div>
+                                <div class="connect-content">
+                                    <h5>LinkedIn</h5>
+                                    <p>Professional networking</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Quick Feedback Form -->
+                    <div class="feedback-section">
+                        <h5 class="mb-3"><i class="fas fa-comment-dots me-2"></i>Quick Feedback</h5>
+                        <form id="feedbackForm" onsubmit="event.preventDefault(); submitFeedback();">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <input type="text" class="form-control" id="feedbackName" placeholder="Your Name" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <input type="email" class="form-control" id="feedbackEmail" placeholder="Your Email" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <select class="form-control" id="feedbackType" required>
+                                    <option value="">Select feedback type</option>
+                                    <option value="collaboration">Collaboration Opportunity</option>
+                                    <option value="feedback">App Feedback</option>
+                                    <option value="bug">Bug Report</option>
+                                    <option value="feature">Feature Request</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <textarea class="form-control" id="feedbackMessage" rows="4" placeholder="Your message..." required></textarea>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary btn-lg px-5">
+                                    <i class="fas fa-paper-plane me-2"></i>Send Message
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Social Stats -->
+                    <div class="social-stats mt-4 pt-4 border-top">
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <div class="stat-item">
+                                    <h4 class="text-primary mb-1">5+</h4>
+                                    <small class="text-muted">Projects</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-item">
+                                    <h4 class="text-success mb-1">100+</h4>
+                                    <small class="text-muted">Commits</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-item">
+                                    <h4 class="text-warning mb-1">24/7</h4>
+                                    <small class="text-muted">Available</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
                                         </div>
                                     </div>
                                     <div class="row">
