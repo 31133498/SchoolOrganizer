@@ -85,10 +85,10 @@
                             </a>
                         </li>
                         <li class="nav-item">
-    <a class="nav-link" href="#" onclick="showSection('connect')">
-        <i class="fas fa-handshake me-1"></i>Connect
-    </a>
-</li>
+                            <a class="nav-link" href="#" onclick="showSection('connect')">
+                                <i class="fas fa-handshake me-1"></i>Connect
+                            </a>
+                        </li>
                     </ul>
                     <!-- User Profile Dropdown -->
                     <div class="dropdown">
@@ -130,12 +130,13 @@
                 <!-- Summary Cards -->
                 <div class="row mb-4">
                     <div class="col-md-3 mb-3">
-                        <div class="card bg-primary text-white dashboard-card">
+                        <div class="card bg-primary text-white dashboard-card clickable-card" onclick="showSection('subjects')">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between">
                                     <div>
                                         <h4 id="totalSubjects">0</h4>
                                         <p class="mb-0">Total Subjects</p>
+                                        <small class="opacity-75">Click to view</small>
                                     </div>
                                     <div class="align-self-center">
                                         <i class="fas fa-book fa-2x"></i>
@@ -145,12 +146,13 @@
                         </div>
                     </div>
                     <div class="col-md-3 mb-3">
-                        <div class="card bg-warning text-white dashboard-card">
+                        <div class="card bg-warning text-white dashboard-card clickable-card" onclick="showSection('assignments')">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between">
                                     <div>
                                         <h4 id="totalAssignments">0</h4>
                                         <p class="mb-0">Total Assignments</p>
+                                        <small class="opacity-75">Click to view</small>
                                     </div>
                                     <div class="align-self-center">
                                         <i class="fas fa-tasks fa-2x"></i>
@@ -160,12 +162,13 @@
                         </div>
                     </div>
                     <div class="col-md-3 mb-3">
-                        <div class="card bg-success text-white dashboard-card">
+                        <div class="card bg-success text-white dashboard-card clickable-card" onclick="showSection('notes')">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between">
                                     <div>
                                         <h4 id="totalNotes">0</h4>
                                         <p class="mb-0">Total Notes</p>
+                                        <small class="opacity-75">Click to view</small>
                                     </div>
                                     <div class="align-self-center">
                                         <i class="fas fa-sticky-note fa-2x"></i>
@@ -175,12 +178,13 @@
                         </div>
                     </div>
                     <div class="col-md-3 mb-3">
-                        <div class="card bg-info text-white dashboard-card">
+                        <div class="card bg-info text-white dashboard-card clickable-card" onclick="showSection('lectures')">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between">
                                     <div>
                                         <h4 id="totalLectures">0</h4>
                                         <p class="mb-0">Total Lectures</p>
+                                        <small class="opacity-75">Click to view</small>
                                     </div>
                                     <div class="align-self-center">
                                         <i class="fas fa-video fa-2x"></i>
@@ -509,7 +513,6 @@
                                                 <textarea class="form-control" id="lectureDescription" rows="3" 
                                                          placeholder="Brief description of what this lecture covers (optional)"></textarea>
                                             </div>
-                
                                         </div>
                                     </div>
                                     <div class="row">
@@ -535,138 +538,139 @@
                     </div>
                 </div>
             </div>
-              <!-- Connect with Me Section -->
-<div id="connect" class="section" style="display: none;">
-    <div class="row">
-        <div class="col-12">
-            <h2><i class="fas fa-handshake me-2"></i>Connect with Me</h2>
-            <p class="text-muted">I'd love to hear your feedback and collaborate on exciting projects!</p>
-            <hr>
-        </div>
-    </div>
 
-    <!-- Connect Cards -->
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card connect-card shadow-lg">
-                <div class="card-body p-5">
-                    <div class="text-center mb-4">
-                        <div class="connect-avatar mb-3">
-                            <i class="fas fa-user-circle fa-4x text-primary"></i>
-                        </div>
-                        <h3 class="mb-2">Let's Build Something Amazing Together!</h3>
-                        <p class="text-muted">Open to collaboration, feedback, and new opportunities</p>
+            <!-- Connect with Me Section -->
+            <div id="connect" class="section" style="display: none;">
+                <div class="row">
+                    <div class="col-12">
+                        <h2><i class="fas fa-handshake me-2"></i>Connect with Me</h2>
+                        <p class="text-muted">I'd love to hear your feedback and collaborate on exciting projects!</p>
+                        <hr>
                     </div>
+                </div>
 
-                    <!-- Contact Options -->
-                    <div class="row g-3 mb-4">
-                        <div class="col-md-6">
-                            <a href="mailto:sannishazily@gmail.com" class="connect-option">
-                                <div class="connect-icon email">
-                                    <i class="fas fa-envelope"></i>
+                <!-- Connect Cards -->
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="card connect-card shadow-lg">
+                            <div class="card-body p-5">
+                                <div class="text-center mb-4">
+                                    <div class="connect-avatar mb-3">
+                                        <i class="fas fa-user-circle fa-4x text-primary"></i>
+                                    </div>
+                                    <h3 class="mb-2">Let's Build Something Amazing Together!</h3>
+                                    <p class="text-muted">Open to collaboration, feedback, and new opportunities</p>
                                 </div>
-                                <div class="connect-content">
-                                    <h5>Email Me</h5>
-                                    <p>sannishazily@gmail.com</p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-6">
-                            <a href="https://wa.me/2347084708292" target="_blank" class="connect-option">
-                                <div class="connect-icon" style="background: linear-gradient(45deg, #25D366, #128C7E);">
-                                    <i class="fab fa-whatsapp"></i>
-                                </div>
-                                <div class="connect-content">
-                                    <h5>WhatsApp</h5>
-                                    <p>07084708292</p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-6">
-                            <a href="https://github.com/31133498" target="_blank" class="connect-option">
-                                <div class="connect-icon github">
-                                    <i class="fab fa-github"></i>
-                                </div>
-                                <div class="connect-content">
-                                    <h5>GitHub</h5>
-                                    <p>Check out my projects</p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-6">
-                            <a href="https://www.linkedin.com/in/sanni-shazily-bba942266/" target="_blank" class="connect-option">
-                                <div class="connect-icon linkedin">
-                                    <i class="fab fa-linkedin"></i>
-                                </div>
-                                <div class="connect-content">
-                                    <h5>LinkedIn</h5>
-                                    <p>Professional networking</p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
 
-                    <!-- Quick Feedback Form -->
-                    <div class="feedback-section">
-                        <h5 class="mb-3"><i class="fas fa-comment-dots me-2"></i>Quick Feedback</h5>
-                        <form id="feedbackForm" onsubmit="event.preventDefault(); submitFeedback();">
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <input type="text" class="form-control" id="feedbackName" placeholder="Your Name" required>
+                                <!-- Contact Options -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <a href="mailto:sannishazily@gmail.com" class="connect-option">
+                                            <div class="connect-icon email">
+                                                <i class="fas fa-envelope"></i>
+                                            </div>
+                                            <div class="connect-content">
+                                                <h5>Email Me</h5>
+                                                <p>sannishazily@gmail.com</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <a href="https://wa.me/2347084708292" target="_blank" class="connect-option">
+                                            <div class="connect-icon" style="background: linear-gradient(45deg, #25D366, #128C7E);">
+                                                <i class="fab fa-whatsapp"></i>
+                                            </div>
+                                            <div class="connect-content">
+                                                <h5>WhatsApp</h5>
+                                                <p>07084708292</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <a href="https://github.com/31133498" target="_blank" class="connect-option">
+                                            <div class="connect-icon github">
+                                                <i class="fab fa-github"></i>
+                                            </div>
+                                            <div class="connect-content">
+                                                <h5>GitHub</h5>
+                                                <p>Check out my projects</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <a href="https://www.linkedin.com/in/sanni-shazily-bba942266/" target="_blank" class="connect-option">
+                                            <div class="connect-icon linkedin">
+                                                <i class="fab fa-linkedin"></i>
+                                            </div>
+                                            <div class="connect-content">
+                                                <h5>LinkedIn</h5>
+                                                <p>Professional networking</p>
+                                            </div>
+                                        </a>
+                                    </div>
                                 </div>
-                                <div class="col-md-6 mb-3">
-                                    <input type="email" class="form-control" id="feedbackEmail" placeholder="Your Email" required>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <select class="form-control" id="feedbackType" required>
-                                    <option value="">Select feedback type</option>
-                                    <option value="collaboration">Collaboration Opportunity</option>
-                                    <option value="feedback">App Feedback</option>
-                                    <option value="bug">Bug Report</option>
-                                    <option value="feature">Feature Request</option>
-                                    <option value="other">Other</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <textarea class="form-control" id="feedbackMessage" rows="4" placeholder="Your message..." required></textarea>
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary btn-lg px-5">
-                                    <i class="fas fa-paper-plane me-2"></i>Send Message
-                                </button>
-                            </div>
-                        </form>
-                    </div>
 
-                    <!-- Social Stats -->
-                    <div class="social-stats mt-4 pt-4 border-top">
-                        <div class="row text-center">
-                            <div class="col-4">
-                                <div class="stat-item">
-                                    <h4 class="text-primary mb-1">5+</h4>
-                                    <small class="text-muted">Projects</small>
+                                <!-- Quick Feedback Form -->
+                                <div class="feedback-section">
+                                    <h5 class="mb-3"><i class="fas fa-comment-dots me-2"></i>Quick Feedback</h5>
+                                    <form id="feedbackForm" onsubmit="event.preventDefault(); submitFeedback();">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <input type="text" class="form-control" id="feedbackName" placeholder="Your Name" required>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <input type="email" class="form-control" id="feedbackEmail" placeholder="Your Email" required>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <select class="form-control" id="feedbackType" required>
+                                                <option value="">Select feedback type</option>
+                                                <option value="collaboration">Collaboration Opportunity</option>
+                                                <option value="feedback">App Feedback</option>
+                                                <option value="bug">Bug Report</option>
+                                                <option value="feature">Feature Request</option>
+                                                <option value="other">Other</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <textarea class="form-control" id="feedbackMessage" rows="4" placeholder="Your message..." required></textarea>
+                                        </div>
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-primary btn-lg px-5">
+                                                <i class="fas fa-paper-plane me-2"></i>Send Message
+                                            </button>
+                                        </div>
+                                    </form>
                                 </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="stat-item">
-                                    <h4 class="text-success mb-1">100+</h4>
-                                    <small class="text-muted">Commits</small>
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="stat-item">
-                                    <h4 class="text-warning mb-1">24/7</h4>
-                                    <small class="text-muted">Available</small>
+
+                                <!-- Social Stats -->
+                                <div class="social-stats mt-4 pt-4 border-top">
+                                    <div class="row text-center">
+                                        <div class="col-4">
+                                            <div class="stat-item">
+                                                <h4 class="text-primary mb-1">5+</h4>
+                                                <small class="text-muted">Projects</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="stat-item">
+                                                <h4 class="text-success mb-1">100+</h4>
+                                                <small class="text-muted">Commits</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="stat-item">
+                                                <h4 class="text-warning mb-1">24/7</h4>
+                                                <small class="text-muted">Available</small>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
         </div>
     </div>
 
