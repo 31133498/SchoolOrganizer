@@ -1289,7 +1289,49 @@ async function deleteLecture(lectureId) {
   }
 }
 
+// ====================== FEEDBACK/CONNECT MANAGEMENT ======================
+
+async function submitFeedback() {
+  const name = document.getElementById("feedbackName").value.trim();
+  const email = document.getElementById("feedbackEmail").value.trim();
+  const type = document.getElementById("feedbackType").value;
+  const message = document.getElementById("feedbackMessage").value.trim();
+
+  if (!name || !email || !type || !message) {
+    showAlert("Please fill in all fields", "warning");
+    return;
+  }
+
+  try {
+    updateDebugInfo(`Submitting feedback from: ${name}`);
+
+    // Store feedback in Firestore
+    await db.collection("feedback").add({
+      name,
+      email,
+      type,
+      message,
+      timestamp: new Date().toISOString(),
+      userAgent: navigator.userAgent,
+      url: window.location.href,
+    });
+
+    // Clear form
+    document.getElementById("feedbackForm").reset();
+
+    // Show success message
+    showAlert(`Thanks ${name}! Your ${type} has been submitted successfully. I'll get back to you soon! 🚀`, "success");
+    updateDebugInfo(`Feedback submitted successfully from ${name}`);
+
+  } catch (error) {
+    console.error("Error submitting feedback:", error);
+    updateDebugInfo(`Error submitting feedback: ${error.message}`);
+    showAlert("Error submitting feedback. Please try emailing me directly!", "danger");
+  }
+}
+
 // Add to the global window object
+window.submitFeedback = submitFeedback
 window.addSubject = addSubject
 window.deleteSubject = deleteSubject
 window.addAssignment = addAssignment
