@@ -113,3 +113,179 @@ body {
   border: none;
   font-weight: 500;
 }
+
+
+/* Connect Section Styles */
+.connect-card {
+  border: none;
+  border-radius: 1.5rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  transition: all 0.3s ease;
+}
+
+.connect-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+}
+
+.connect-avatar {
+  position: relative;
+  display: inline-block;
+}
+
+.connect-avatar::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+  border: 3px solid #007bff;
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 0.1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.3;
+  }
+}
+
+.connect-option {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border: 2px solid #e9ecef;
+  border-radius: 1rem;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+  background: white;
+  height: 100%;
+}
+
+.connect-option:hover {
+  color: inherit;
+  text-decoration: none;
+  border-color: #007bff;
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 123, 255, 0.15);
+}
+
+.connect-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  font-size: 1.5rem;
+  color: white;
+  flex-shrink: 0;
+}
+
+.connect-icon.email {
+  background: linear-gradient(45deg, #ea4335, #fbbc05);
+}
+
+.connect-icon.github {
+  background: linear-gradient(45deg, #333, #666);
+}
+
+.connect-icon.linkedin {
+  background: linear-gradient(45deg, #0077b5, #00a0dc);
+}
+
+.connect-content h5 {
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.connect-content p {
+  margin-bottom: 0;
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+.feedback-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  border: 2px solid #e9ecef;
+  margin-top: 2rem;
+}
+
+.feedback-section h5 {
+  color: #495057;
+  font-weight: 600;
+}
+
+.social-stats .stat-item {
+  padding: 0.5rem;
+}
+
+.social-stats h4 {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+/* Responsive adjustments for connect section */
+@media (max-width: 768px) {
+  .connect-card .card-body {
+    padding: 2rem 1.5rem !important;
+  }
+
+  .connect-option {
+    margin-bottom: 1rem;
+  }
+
+  .feedback-section {
+    padding: 1.5rem;
+  }
+
+  .social-stats .row {
+    gap: 1rem;
+  }
+}
+
+/* Animation for connect section */
+.connect-option {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.connect-option:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.connect-option:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.connect-option:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.connect-option:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
