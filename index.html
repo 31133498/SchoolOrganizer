@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Organizer</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="container">
+            <div class="row justify-content-center align-items-center min-vh-100">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card shadow-lg">
+                        <div class="card-body text-center p-5">
+                            <div class="mb-4">
+                                <i class="fas fa-graduation-cap fa-4x text-primary"></i>
+                            </div>
+                            <h2 class="mb-3">School Organizer</h2>
+                            <p class="text-muted mb-4">Organize your academic life with ease</p>
+                            <button id="googleSignInBtn" class="btn btn-danger btn-lg w-100">
+                                <i class="fab fa-google me-2"></i>
+                                Sign in with Google
+                            </button>
+                            <div id="loginError" class="alert alert-danger mt-3" style="display: none;"></div>
+                            
+                            <!-- Debug buttons for testing -->
+                            <div class="mt-3">
+                                <button onclick="testFirebase()" class="btn btn-outline-secondary btn-sm me-2">
+                                    Test Firebase
+                                </button>
+                                <button onclick="enableDebugMode()" class="btn btn-outline-info btn-sm">
+                                    Enable Debug
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App (hidden initially) -->
+    <div id="mainApp" style="display: none;">
+        <!-- Navigation Bar -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="#"><i class="fas fa-graduation-cap me-2"></i>School Organizer</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#" onclick="showSection('dashboard')">
+                                <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showSection('subjects')">
+                                <i class="fas fa-book me-1"></i>Subjects
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showSection('assignments')">
+                                <i class="fas fa-tasks me-1"></i>Assignments
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showSection('notes')">
+                                <i class="fas fa-sticky-note me-1"></i>Notes
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showSection('lectures')">
+                                <i class="fas fa-video me-1"></i>Lectures
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- User Profile Dropdown -->
+                    <div class="dropdown">
+                        <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
+                            <img id="userPhoto" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'%3E%3C/path%3E%3Ccircle cx='12' cy='7' r='4'%3E%3C/circle%3E%3C/svg%3E" alt="User" class="rounded-circle me-2" width="24" height="24">
+                            <span id="userName">User</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><h6 class="dropdown-header" id="userEmail">user@example.com</h6></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="signOut()">
+                                <i class="fas fa-sign-out-alt me-2"></i>Sign Out
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container mt-4">
+            <!-- Debug Panel (for troubleshooting) -->
+            <div id="debugPanel" class="alert alert-info" style="display: none;">
+                <h6><i class="fas fa-bug me-2"></i>Debug Information</h6>
+                <div id="debugInfo" style="max-height: 150px; overflow-y: auto; font-family: monospace; font-size: 0.8rem;"></div>
+                <button onclick="document.getElementById('debugInfo').innerHTML = ''" class="btn btn-sm btn-outline-primary mt-2">
+                    Clear Debug Log
+                </button>
+            </div>
+
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="section">
+                <div class="row">
+                    <div class="col-12">
+                        <h2><i class="fas fa-tachometer-alt me-2"></i>Dashboard</h2>
+                        <hr>
+                    </div>
+                </div>
+                
+                <!-- Summary Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-primary text-white dashboard-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4 id="totalSubjects">0</h4>
+                                        <p class="mb-0">Total Subjects</p>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-book fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-warning text-white dashboard-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4 id="totalAssignments">0</h4>
+                                        <p class="mb-0">Total Assignments</p>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-tasks fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-success text-white dashboard-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4 id="totalNotes">0</h4>
+                                        <p class="mb-0">Total Notes</p>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-sticky-note fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-info text-white dashboard-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4 id="totalLectures">0</h4>
+                                        <p class="mb-0">Total Lectures</p>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-video fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Connection Status -->
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div id="connectionStatus" class="alert alert-secondary">
+                            <i class="fas fa-wifi me-2"></i>Connecting to Firebase...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Assignments -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-clock me-2"></i>Upcoming Assignments</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="upcomingAssignments">
+                                    <div class="text-center">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <p class="mt-2 text-muted">Loading assignments...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subjects Section -->
+            <div id="subjects" class="section" style="display: none;">
+                <div class="row">
+                    <div class="col-12">
+                        <h2><i class="fas fa-book me-2"></i>Subjects</h2>
+                        <hr>
+                    </div>
+                </div>
+
+                <!-- Add Subject Form -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-plus me-2"></i>Add New Subject</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="subjectForm" onsubmit="event.preventDefault(); addSubject();">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="subjectName" class="form-label">Subject Name *</label>
+                                                <input type="text" class="form-control" id="subjectName" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="mb-3">
+                                                <label for="subjectCode" class="form-label">Subject Code</label>
+                                                <input type="text" class="form-control" id="subjectCode" placeholder="e.g., CS101">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="mb-3">
+                                                <label for="subjectColor" class="form-label">Color</label>
+                                                <input type="color" class="form-control form-control-color" id="subjectColor" value="#007bff">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="mb-3">
+                                                <label class="form-label">&nbsp;</label>
+                                                <button type="submit" class="btn btn-primary w-100">
+                                                    <i class="fas fa-plus me-1"></i>Add
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subjects List -->
+                <div class="row" id="subjectsList">
+                    <div class="col-12 text-center py-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2 text-muted">Loading subjects...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assignments Section -->
+            <div id="assignments" class="section" style="display: none;">
+                <div class="row">
+                    <div class="col-12">
+                        <h2><i class="fas fa-tasks me-2"></i>Assignments</h2>
+                        <hr>
+                    </div>
+                </div>
+
+                <!-- Add Assignment Form -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-plus me-2"></i>Add New Assignment</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="assignmentForm" onsubmit="event.preventDefault(); addAssignment();">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="assignmentTitle" class="form-label">Assignment Title *</label>
+                                                <input type="text" class="form-control" id="assignmentTitle" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="assignmentSubject" class="form-label">Subject *</label>
+                                                <select class="form-control subject-select" id="assignmentSubject" required>
+                                                    <option value="">Select a subject</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="assignmentDueDate" class="form-label">Due Date *</label>
+                                                <input type="date" class="form-control" id="assignmentDueDate" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="assignmentPriority" class="form-label">Priority *</label>
+                                                <select class="form-control" id="assignmentPriority" required>
+                                                    <option value="low">Low</option>
+                                                    <option value="medium" selected>Medium</option>
+                                                    <option value="high">High</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label class="form-label">&nbsp;</label>
+                                                <button type="submit" class="btn btn-primary w-100">
+                                                    <i class="fas fa-plus me-1"></i>Add Assignment
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="mb-3">
+                                                <label for="assignmentDescription" class="form-label">Description</label>
+                                                <textarea class="form-control" id="assignmentDescription" rows="3" placeholder="Assignment description (optional)"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Assignments List -->
+                <div class="row" id="assignmentsList">
+                    <div class="col-12 text-center py-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2 text-muted">Loading assignments...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notes Section -->
+            <div id="notes" class="section" style="display: none;">
+                <div class="row">
+                    <div class="col-12">
+                        <h2><i class="fas fa-sticky-note me-2"></i>Notes</h2>
+                        <hr>
+                    </div>
+                </div>
+
+                <!-- Add Note Form -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-plus me-2"></i>Add New Note</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="noteForm" onsubmit="event.preventDefault(); addNote();">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="mb-3">
+                                                <label for="noteTitle" class="form-label">Note Title *</label>
+                                                <input type="text" class="form-control" id="noteTitle" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="noteSubject" class="form-label">Subject (Optional)</label>
+                                                <select class="form-control subject-select" id="noteSubject">
+                                                    <option value="">Select a subject</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="mb-3">
+                                                <label for="noteContent" class="form-label">Content *</label>
+                                                <textarea class="form-control" id="noteContent" rows="6" required placeholder="Write your note content here..."></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="mb-3">
+                                                <label for="noteLinks" class="form-label">Related Links (Optional)</label>
+                                                <textarea class="form-control" id="noteLinks" rows="3" placeholder="Add related links, one per line:&#10;https://example.com&#10;https://docs.google.com/...&#10;youtube.com/watch?v=..."></textarea>
+                                                <div class="form-text">
+                                                    <i class="fas fa-info-circle me-1"></i>
+                                                    Add one link per line. You can include websites, documents, videos, or any other resources related to this note.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fas fa-plus me-1"></i>Add Note
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notes List -->
+                <div class="row" id="notesList">
+                    <div class="col-12 text-center py-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2 text-muted">Loading notes...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lectures Section -->
+            <div id="lectures" class="section" style="display: none;">
+                <div class="row">
+                    <div class="col-12">
+                        <h2><i class="fas fa-video me-2"></i>Lecture Links</h2>
+                        <p class="text-muted">Save and organize your lecture video links</p>
+                        <hr>
+                    </div>
+                </div>
+
+                <!-- Add Lecture Form -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-plus me-2"></i>Add New Lecture Link</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="lectureForm" onsubmit="event.preventDefault(); addLecture();">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="lectureTopic" class="form-label">Lecture Topic *</label>
+                                                <input type="text" class="form-control" id="lectureTopic" required placeholder="e.g., Introduction to Algorithms">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="lectureSubject" class="form-label">Subject *</label>
+                                                <select class="form-control subject-select" id="lectureSubject" required>
+                                                    <option value="">Select a subject</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="mb-3">
+                                                <label for="lectureVideoUrl" class="form-label">Video URL *</label>
+                                                <input type="url" class="form-control" id="lectureVideoUrl" required 
+                                                       placeholder="https://youtube.com/watch?v=... or https://vimeo.com/...">
+                                                <div class="form-text">
+                                                    <i class="fas fa-info-circle me-1"></i>
+                                                    Supports YouTube, Vimeo, Twitch, Zoom, and other video platforms
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                <label for="lectureDuration" class="form-label">Duration</label>
+                                                <input type="text" class="form-control" id="lectureDuration" placeholder="e.g., 45 min, 1h 30m">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="mb-3">
+                                                <label for="lectureDescription" class="form-label">Description</label>
+                                                <textarea class="form-control" id="lectureDescription" rows="3" 
+                                                         placeholder="Brief description of what this lecture covers (optional)"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fas fa-plus me-1"></i>Add Lecture Link
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lectures List -->
+                <div class="row" id="lecturesList">
+                    <div class="col-12 text-center py-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2 text-muted">Loading lectures...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK v8 (Compat) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="script.js"></script>
+</body>
+</html>
