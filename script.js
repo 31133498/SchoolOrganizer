@@ -981,9 +981,64 @@ function renderNotes() {
     return
   }
 
-  notesContainer.innerHTML = notes
-    .map(
-      (note) => `
+  // Group notes by subject
+  const notesBySubject = {};
+  const generalNotes = [];
+  
+  notes.forEach(note => {
+    if (note.subjectId) {
+      if (!notesBySubject[note.subjectId]) {
+        notesBySubject[note.subjectId] = [];
+      }
+      notesBySubject[note.subjectId].push(note);
+    } else {
+      generalNotes.push(note);
+    }
+  });
+
+  // Build HTML for notes organized by subjects
+  let notesHTML = '';
+  
+  // Add notes grouped by subject
+  Object.keys(notesBySubject).forEach(subjectId => {
+    const subjectNotes = notesBySubject[subjectId];
+    const subject = subjects.find(s => s.id === subjectId);
+    
+    if (!subject) return;
+    
+    notesHTML += `
+      <div class="subject-group mb-4">
+        <div class="d-flex align-items-center mb-3">
+          <div class="subject-icon me-2" style="background-color: ${subject.color || '#007bff'}; width: 24px; height: 24px; border-radius: 50%;"></div>
+          <h4>${subject.name}</h4>
+        </div>
+        <div class="row">
+          ${subjectNotes.map(note => renderNoteCard(note)).join('')}
+        </div>
+      </div>
+    `;
+  });
+
+  // Add general notes (no subject)
+  if (generalNotes.length > 0) {
+    notesHTML += `
+      <div class="subject-group mb-4">
+        <div class="d-flex align-items-center mb-3">
+          <div class="subject-icon me-2" style="background-color: #6c757d; width: 24px; height: 24px; border-radius: 50%;"></div>
+          <h4>General Notes</h4>
+        </div>
+        <div class="row">
+          ${generalNotes.map(note => renderNoteCard(note)).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  notesContainer.innerHTML = notesHTML;
+}
+
+function renderNoteCard(note) {
+  return `
     <div class="col-md-6 col-lg-4 mb-3">
       <div class="card h-100">
         <div class="card-body">
@@ -993,49 +1048,32 @@ function renderNotes() {
               <i class="fas fa-trash"></i>
             </button>
           </div>
-          ${
-            note.subjectName
-              ? `
+          ${note.subjectName ? `
             <p class="mb-2">
               <span class="badge" style="background-color: ${note.subjectColor || "#007bff"}">
                 ${note.subjectName}
               </span>
             </p>
-          `
-              : ""
-          }
+          ` : ''}
           <p class="card-text">${note.content.substring(0, 150)}${note.content.length > 150 ? "..." : ""}</p>
           
-          ${
-            note.links && note.links.length > 0
-              ? `
+          ${note.links && note.links.length > 0 ? `
             <div class="mt-3">
               <h6 class="text-muted mb-2"><i class="fas fa-link me-1"></i>Links (${note.links.length})</h6>
               <div class="d-flex flex-wrap gap-1">
-                ${note.links
-                  .slice(0, 3)
-                  .map(
-                    (link, index) => `
+                ${note.links.slice(0, 3).map((link, index) => `
                   <button class="btn btn-sm btn-outline-primary" onclick="window.open('${link}', '_blank')" title="${link}">
                     <i class="fas fa-external-link-alt me-1"></i>Link ${index + 1}
                   </button>
-                `,
-                  )
-                  .join("")}
-                ${
-                  note.links.length > 3
-                    ? `
+                `).join("")}
+                ${note.links.length > 3 ? `
                   <button class="btn btn-sm btn-outline-secondary" onclick="showAllNoteLinks('${note.id}', '${note.title}', ${JSON.stringify(note.links).replace(/"/g, "&quot;")})">
                     <i class="fas fa-plus me-1"></i>+${note.links.length - 3} more
                   </button>
-                `
-                    : ""
-                }
+                ` : ""}
               </div>
             </div>
-          `
-              : ""
-          }
+          ` : ""}
           
           <div class="mt-auto pt-3">
             <small class="text-muted">
@@ -1046,9 +1084,7 @@ function renderNotes() {
         </div>
       </div>
     </div>
-  `,
-    )
-    .join("")
+  `;
 }
 
 // Add function to show all links in a modal-like view
@@ -1193,68 +1229,121 @@ function renderLectures() {
     return
   }
 
-  lecturesContainer.innerHTML = lectures
-    .map((lecture) => {
-      const videoIcon = getVideoIcon(lecture.videoUrl)
+  // Group lectures by subject
+  const lecturesBySubject = {};
+  const generalLectures = [];
+  
+  lectures.forEach(lecture => {
+    if (lecture.subjectId) {
+      if (!lecturesBySubject[lecture.subjectId]) {
+        lecturesBySubject[lecture.subjectId] = [];
+      }
+      lecturesBySubject[lecture.subjectId].push(lecture);
+    } else {
+      generalLectures.push(lecture);
+    }
+  });
 
-      return `
-      <div class="col-md-6 col-lg-4 mb-3">
-        <div class="card h-100 ${lecture.watched ? "border-success" : ""}">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-              <h5 class="card-title">${lecture.topic}</h5>
-              <div class="dropdown">
-                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
-                  <i class="fas fa-ellipsis-v"></i>
-                </button>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#" onclick="toggleLectureWatched('${lecture.id}', ${lecture.watched})">
-                    <i class="fas fa-${lecture.watched ? "eye-slash" : "eye"} me-2"></i>
-                    Mark as ${lecture.watched ? "Unwatched" : "Watched"}
-                  </a></li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item text-danger" href="#" onclick="deleteLecture('${lecture.id}')">
-                    <i class="fas fa-trash me-2"></i>Delete
-                  </a></li>
-                </ul>
-              </div>
-            </div>
-            
-            <p class="mb-2">
-              <span class="badge" style="background-color: ${lecture.subjectColor || "#007bff"}">
-                ${lecture.subjectName}
-              </span>
-              ${lecture.watched ? '<span class="badge bg-success ms-1">Watched</span>' : '<span class="badge bg-secondary ms-1">Not Watched</span>'}
-            </p>
-            
-            ${lecture.description ? `<p class="card-text mb-3">${lecture.description}</p>` : ""}
-            
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <div class="d-flex align-items-center">
-                <i class="${videoIcon} me-2 text-primary"></i>
-                <small class="text-muted">Video Link</small>
-              </div>
-              ${lecture.duration ? `<small class="text-muted"><i class="fas fa-clock me-1"></i>${lecture.duration}</small>` : ""}
-            </div>
-            
-            <div class="d-grid">
-              <button class="btn btn-primary" onclick="openLectureVideo('${lecture.videoUrl}', '${lecture.id}', ${lecture.watched})">
-                <i class="fas fa-play me-2"></i>Watch Lecture
+  // Build HTML for lectures organized by subjects
+  let lecturesHTML = '';
+  
+  // Add lectures grouped by subject
+  Object.keys(lecturesBySubject).forEach(subjectId => {
+    const subjectLectures = lecturesBySubject[subjectId];
+    const subject = subjects.find(s => s.id === subjectId);
+    
+    if (!subject) return;
+    
+    lecturesHTML += `
+      <div class="subject-group mb-4">
+        <div class="d-flex align-items-center mb-3">
+          <div class="subject-icon me-2" style="background-color: ${subject.color || '#007bff'}; width: 24px; height: 24px; border-radius: 50%;"></div>
+          <h4>${subject.name}</h4>
+        </div>
+        <div class="row">
+          ${subjectLectures.map(lecture => renderLectureCard(lecture)).join('')}
+        </div>
+      </div>
+    `;
+  });
+
+  // Add general lectures (no subject)
+  if (generalLectures.length > 0) {
+    lecturesHTML += `
+      <div class="subject-group mb-4">
+        <div class="d-flex align-items-center mb-3">
+          <div class="subject-icon me-2" style="background-color: #6c757d; width: 24px; height: 24px; border-radius: 50%;"></div>
+          <h4>General Lectures</h4>
+        </div>
+        <div class="row">
+          ${generalLectures.map(lecture => renderLectureCard(lecture)).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  lecturesContainer.innerHTML = lecturesHTML;
+}
+
+function renderLectureCard(lecture) {
+  const videoIcon = getVideoIcon(lecture.videoUrl);
+  
+  return `
+    <div class="col-md-6 col-lg-4 mb-3">
+      <div class="card h-100 ${lecture.watched ? "border-success" : ""}">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <h5 class="card-title">${lecture.topic}</h5>
+            <div class="dropdown">
+              <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fas fa-ellipsis-v"></i>
               </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#" onclick="toggleLectureWatched('${lecture.id}', ${lecture.watched})">
+                  <i class="fas fa-${lecture.watched ? "eye-slash" : "eye"} me-2"></i>
+                  Mark as ${lecture.watched ? "Unwatched" : "Watched"}
+                </a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger" href="#" onclick="deleteLecture('${lecture.id}')">
+                  <i class="fas fa-trash me-2"></i>Delete
+                </a></li>
+              </ul>
             </div>
-            
-            <div class="mt-2">
-              <small class="text-muted">
-                <i class="fas fa-calendar me-1"></i>
-                Added ${formatDate(lecture.createdAt)}
-              </small>
+          </div>
+          
+          <p class="mb-2">
+            <span class="badge" style="background-color: ${lecture.subjectColor || "#007bff"}">
+              ${lecture.subjectName || "No Subject"}
+            </span>
+            ${lecture.watched ? '<span class="badge bg-success ms-1">Watched</span>' : '<span class="badge bg-secondary ms-1">Not Watched</span>'}
+          </p>
+          
+          ${lecture.description ? `<p class="card-text mb-3">${lecture.description}</p>` : ""}
+          
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="d-flex align-items-center">
+              <i class="${videoIcon} me-2 text-primary"></i>
+              <small class="text-muted">Video Link</small>
             </div>
+            ${lecture.duration ? `<small class="text-muted"><i class="fas fa-clock me-1"></i>${lecture.duration}</small>` : ""}
+          </div>
+          
+          <div class="d-grid">
+            <button class="btn btn-primary" onclick="openLectureVideo('${lecture.videoUrl}', '${lecture.id}', ${lecture.watched})">
+              <i class="fas fa-play me-2"></i>Watch Lecture
+            </button>
+          </div>
+          
+          <div class="mt-2">
+            <small class="text-muted">
+              <i class="fas fa-calendar me-1"></i>
+              Added ${formatDate(lecture.createdAt)}
+            </small>
           </div>
         </div>
       </div>
-    `
-    })
-    .join("")
+    </div>
+  `;
 }
 
 // Function to get appropriate video icon based on URL
